@@ -107,7 +107,7 @@ def show(T,x="",c="blue"):
     plt.ylabel("Wielkosc populacji")
     plt.plot(T[0],T[1],color=c)
     plt.plot(years,population,'o',color="red")
-    plt.savefig(f"mownit/lab3/pictures/Wielomian interpolacyjny - {x}")
+    plt.savefig(f"lab3/pictures/Wielomian interpolacyjny - {x}")
     #plt.show()
 
 
