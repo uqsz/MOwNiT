@@ -1,19 +1,16 @@
 import numpy as np
 from numpy.linalg import lstsq
 import matplotlib.pyplot as plt
-from numpy.polynomial.chebyshev import chebfit, chebval
+import scipy.integrate as spi
 
 # ZADANIE 1
-
 
 def vand(Y, n):
     return np.fromfunction(lambda i, j: Y[i.astype(int)]**(n-j-1), (9, n), dtype=float)
 
-
 def AIC_c(m, n, s):
     k = m+1
     return 2*k+n*np.log(s/n)+2*k*(k+1)/(n-k-1)
-
 
 true_1990 = 248709873
 
@@ -24,7 +21,6 @@ populacja = np.array([76212168, 92228496, 106021537, 123202624,
 result1 = []
 result2 = []
 
-# Przeprowadzenie aproksymacji średniokwadratowej punktowej dla różnych stopni m
 for m in range(0, 7):
     A = vand(rok, m+1)
     wsp, res, rnk, s = lstsq(A, populacja, rcond=None)
@@ -69,7 +65,6 @@ plt.grid(True)
 plt.savefig("pictures/Wartosc AIC_c dla danego modelu aproksymacyjnego", dpi=400)
 plt.show()
 
-
 print("{:<8} {:^7} {:^20}".format("Stopien", "Blad", "Wspolczynnik AIC_c"))
 for i in range(0, 7):
     print("{:^8} {:^7} {:^20}".format(
@@ -85,26 +80,31 @@ plt.show()
 
 
 # ZADANIE 2
+
 def f(x):
-    return np.sqrt(x)
+    return np.sqrt(x+1)
 
+a0 = spi.quad(lambda x: f(x) * 1/np.sqrt(1-x**2), -1, 1)[0] / np.pi
+a1 = 2*spi.quad(lambda x: f(x) * x/np.sqrt(1-x**2), -1, 1)[0] / np.pi
+a2 = 2*spi.quad(lambda x: f(x) * (2*x**2-1)/np.sqrt(1-x**2), -1, 1)[0] / np.pi
 
-x = np.linspace(0, 2, 1000)
-y = f(x)
+def P(x):
+    return a0 + a1 * x + a2 * (2*x**2-1)
 
-deg = 2
-coeffs = chebfit(x, y, deg)
+x_f = np.linspace(-1, 1, 100)
+y_f = f(x_f)
+x_f = np.linspace(0, 2, 100)
 
-x_aprox = np.linspace(0, 2, 1000)
-y_aprox = chebval(x_aprox, coeffs)
+x_P = np.linspace(-1,1 , 100)
+y_P = P(x_P)
+x_P = np.linspace(0, 2, 100)
 
-plt.plot(x, y, label='f(x) = sqrt(x)')
-plt.plot(x_aprox, y_aprox, label='Aproksymacja')
+plt.plot(x_f, y_f, label='f(x)', color='blue')
+plt.plot(x_P, y_P, label='P(x)', color='red')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.legend()
-plt.title('Aproksymacja funkcji sqrt(x) wielomianem Czebyszewa')
+plt.title('Aproksymacja ciągła funkcji f(x) za pomocą wielomianu Czebyszewa')
 plt.grid(True)
-plt.savefig(
-    "pictures/Aproksymacja funkcji sqrt(x) wielomianem Czebyszewa", dpi=400)
+plt.savefig("pictures/Aproksymacja ciągła funkcji f(x) za pomocą wielomianu Czebyszewa (metoda aproksymacji ortogonalnej)", dpi=400)
 plt.show()
