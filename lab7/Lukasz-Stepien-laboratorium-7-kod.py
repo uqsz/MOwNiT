@@ -57,11 +57,12 @@ def integrate_all(a,b,f,ex_res,title,cnt):
         error_simp = np.abs((result_simp - ex_res)/ex_res+eps)
         errors_simpson.append(error_simp)
         
-        # Metoda Gaussa-Legendre'a
-        nodes, weights = np.polynomial.legendre.leggauss(m)
-        approx_value = np.dot(weights, f((b-a)/2 * nodes + (a+b)/2))/2
-        error = np.abs((ex_res - approx_value)/ex_res+eps)
-        errors_gl.append(error)
+        if m<15:
+            # Metoda Gaussa-Legendre'a
+            nodes, weights = np.polynomial.legendre.leggauss(n)
+            approx_value = np.dot(weights, f((b-a)/2 * nodes + (a+b)/2))/2
+            error = np.abs((ex_res - approx_value)/ex_res+eps)
+            errors_gl.append(error)
     
     for i in range(29):
         # Metoda adaptacyjna trapezów
@@ -77,7 +78,7 @@ def integrate_all(a,b,f,ex_res,title,cnt):
     # Wykres
     plt.plot(neval_adaptive_trapezoid,errors_adaptive_trapezoid, '-o',label='Adaptive trapezoid')
     plt.plot(neval_adaptive_gk,errors_adaptive_gk, '-o',label='Adaptive GK')
-    plt.plot(num_nodes, errors_gl, 'o-', label='Gauss-Legendre')
+    plt.plot(num_nodes[0:14], errors_gl, 'o-', label='Gauss-Legendre')
     plt.plot(num_nodes, errors_trapezoid, 'o-', label='Trapezoid')
     plt.plot(num_nodes, errors_rectangle, 'o-', label='Rectangle')
     plt.plot(num_nodes, errors_simpson, 'o-', label='Simpson')
