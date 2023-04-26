@@ -78,10 +78,10 @@ def integrate_all(a,b,f,ex_res,title,cnt):
     # Wykres
     plt.plot(neval_adaptive_trapezoid,errors_adaptive_trapezoid, '-o',label='Adaptive trapezoid')
     plt.plot(neval_adaptive_gk,errors_adaptive_gk, '-o',label='Adaptive GK')
-    plt.plot(num_nodes[0:14], errors_gl, 'o-', label='Gauss-Legendre')
     plt.plot(num_nodes, errors_trapezoid, 'o-', label='Trapezoid')
     plt.plot(num_nodes, errors_rectangle, 'o-', label='Rectangle')
     plt.plot(num_nodes, errors_simpson, 'o-', label='Simpson')
+    plt.plot(np.array(num_nodes[0:14])*2, errors_gl, 'o-', label='Gauss-Legendre')
     plt.title(title)
     plt.ylim([min(min(errors_adaptive_gk),1e-13),1e2])
     plt.xlabel('Liczba ewaluacji funkcji n')
