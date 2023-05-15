@@ -24,8 +24,8 @@ for m in range(1,25):
     num_nodes.append(m)
 
     # Metoda złożonych prostokątów
-    x_rect = np.linspace(a, b, n+1)
-    result_rect = np.sum(f(x_rect[:-1]) * (b-a)/n)
+    x_rect = np.linspace(a, b, n)
+    result_rect = np.sum(f(x_rect) * (b-a)/n)
     error_rect = np.abs((result_rect - np.pi)/np.pi)
     errors_rectangle.append(error_rect)
 
@@ -92,7 +92,7 @@ plt.ylabel('Błąd względny względem $\pi$')
 plt.yscale('log')
 plt.legend()
 plt.grid(True)
-plt.savefig("pictures/Blad wzgledny dla roznych metod", dpi=350)
+plt.savefig("lab6/pictures/Blad wzgledny dla roznych metod", dpi=350)
 
 plt.show()
 

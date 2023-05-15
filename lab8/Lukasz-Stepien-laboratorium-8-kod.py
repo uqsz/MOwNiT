@@ -65,7 +65,7 @@ plt.legend(fontsize='large')
 plt.title("Błąd względny w każdej iteracji dla wszystkich funkcji g")
 plt.xlabel('Liczba iteracji i')
 plt.ylabel('Błąd względny')
-plt.savefig(f"pictures/Błąd względny w każdej iteracji dla wszystkich funkcji g", dpi=350)
+#plt.savefig(f"pictures/Błąd względny w każdej iteracji dla wszystkich funkcji g", dpi=350)
 plt.show()
 
 plt.semilogy(t2,'-o', label=r'$g2(x)=\sqrt{3x-2}$')
@@ -75,7 +75,7 @@ plt.legend(fontsize='large')
 plt.title("Błąd względny w każdej iteracji dla zbieżnych funkcji g ")
 plt.xlabel('Liczba iteracji i')
 plt.ylabel('Błąd względny')
-plt.savefig(f"pictures/Błąd względny w każdej iteracji dla zbieżnych funkcji g", dpi=350)
+#plt.savefig(f"pictures/Błąd względny w każdej iteracji dla zbieżnych funkcji g", dpi=350)
 
 plt.show()
 
