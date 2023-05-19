@@ -26,7 +26,7 @@ plt.xlabel('t')
 plt.ylabel('y')
 plt.title('Metoda Eulera dla kroku h=0.5')
 plt.grid(True)
-plt.savefig(f"pictures/Metoda Eulera dla kroku h=0,5", dpi=350)
+#plt.savefig(f"pictures/Metoda Eulera dla kroku h=0,5", dpi=350)
 # plt.show()
 
 def niejawny_euler(t_end,h,f):
@@ -49,7 +49,7 @@ plt.xlabel('t')
 plt.ylabel('y')
 plt.title('Niejawna metoda Eulera dla kroku h=0.5')
 plt.grid(True)
-plt.savefig(f"pictures/Niejawna metoda Eulera dla kroku h=0,5", dpi=350)
+#plt.savefig(f"pictures/Niejawna metoda Eulera dla kroku h=0,5", dpi=350)
 # plt.show()
 
 
@@ -71,8 +71,8 @@ def show(Tvx,Tx,Tvy,Ty,Tt,title):
     plt.ylabel('y')
     plt.title('Wykres y(t) -> '+title)
     plt.grid(True)
-    plt.savefig("pictures/"+'Wykres y(t) '+title, dpi=350)
-    # plt.show()
+    #plt.savefig("pictures/"+'Wykres y(t) '+title, dpi=350)
+    plt.show()
     
     plt.clf()
     plt.plot(Tt,Tx)
@@ -80,20 +80,20 @@ def show(Tvx,Tx,Tvy,Ty,Tt,title):
     plt.ylabel('x')
     plt.title('Wykres x(t) -> '+title)
     plt.grid(True)
-    plt.savefig("pictures/"+'Wykres x(t) '+title, dpi=350)
-    # plt.show()
+    #plt.savefig("pictures/"+'Wykres x(t) '+title, dpi=350)
+    plt.show()
     
     plt.clf()
-    fig = plt.figure()
-    ax = fig.add_subplot()
+    #fig = plt.figure()
+    #ax = fig.add_subplot()
     plt.plot(Ty,Tx)
     plt.xlabel('y')
     plt.ylabel('x')
     plt.title('Wykres x(y) -> '+title)
     plt.grid(True)
-    ax.set_aspect('equal', adjustable='box')
-    plt.savefig("pictures/"+'Wykres x(y) '+title, dpi=350)
-    # plt.show()
+    #ax.set_aspect('equal', adjustable='box')
+    #plt.savefig("pictures/"+'Wykres x(y) '+title, dpi=350)
+    plt.show()
     
     Tr=[r(Tx[i],Ty[i]) for i in range(len(Tx))]
     Tvr=[r(Tvx[i],Tvy[i]) for i in range(len(Tx))]
@@ -104,8 +104,8 @@ def show(Tvx,Tx,Tvy,Ty,Tt,title):
     plt.ylabel('vr')
     plt.title('Wykres vr(r) -> '+title)
     plt.grid(True)
-    plt.savefig("pictures/"+'Wykres vr(r) '+title, dpi=350)
-    # plt.show()
+    #plt.savefig("pictures/"+'Wykres vr(r) '+title, dpi=350)
+    plt.show()
     
     Tpze=[pze(Tvx[i],Tvy[i],Tx[i],Ty[i]) for i in range(len(Tx))]
     
@@ -115,8 +115,8 @@ def show(Tvx,Tx,Tvy,Ty,Tt,title):
     plt.ylabel('E')
     plt.title('Wykres energii E(t) -> '+title)
     plt.grid(True)
-    plt.savefig("pictures/"+'Wykres energii E(t) '+title, dpi=350)
-    # plt.show()
+    #plt.savefig("pictures/"+'Wykres energii E(t) '+title, dpi=350)
+    plt.show()
     
     Tpzmp=[pzmp(Tvx[i],Tvy[i],Tx[i],Ty[i]) for i in range(len(Tx))]
     plt.clf()
@@ -125,18 +125,18 @@ def show(Tvx,Tx,Tvy,Ty,Tt,title):
     plt.ylabel('p')
     plt.title('Wykres momentu pedu p(t) -> '+title)
     plt.grid(True)
-    plt.savefig("pictures/"+'Wykres momentu pedu p(t) '+title, dpi=350)
-    # plt.show()
+    # plt.savefig("pictures/"+'Wykres momentu pedu p(t) '+title, dpi=350)
+    plt.show()
 
 
 def f(x,y,t):
     return (x**2+y**2)**(-1.5)
 
-def euler_mul(t_end,h):
-    Tx=[1]
+def euler_mul(t_end,h,e):
+    Tx=[1-e]
     Ty=[0]
     Tvx=[0]
-    Tvy=[1]
+    Tvy=[np.sqrt((1+e)/(1-e))]
     Tt=[0]
     t=0
     i=0
@@ -150,8 +150,8 @@ def euler_mul(t_end,h):
         t+=h
     return Tvx,Tx,Tvy,Ty,Tt
         
-Tvx,Tx,Tvy,Ty,Tt=euler_mul(40,10**(-3))
-show(Tvx,Tx,Tvy,Ty,Tt,"jawna metoda Eulera")
+#Tvx,Tx,Tvy,Ty,Tt=euler_mul(40,10**(-5),0.4)
+#show(Tvx,Tx,Tvy,Ty,Tt,"jawna metoda Eulera")
 
 #zadanie 3b
 
@@ -200,11 +200,11 @@ def solve_equations(a, b, c, d, h, tol=1e-12, max_iter=100):
             return x
     
 
-def euler_mul1(t_end,h):
-    Tx=[1]
+def euler_mul1(t_end,h,e):
+    Tx=[1-e]
     Ty=[0]
     Tvx=[0]
-    Tvy=[1]
+    Tvy=[np.sqrt((1+e)/(1-e))]
     Tt=[0]
     t=0
     i=0
@@ -219,8 +219,8 @@ def euler_mul1(t_end,h):
         t+=h
     return Tvx,Tx,Tvy,Ty,Tt
 
-Tvx,Tx,Tvy,Ty,Tt=euler_mul1(40,10**(-3))
-show(Tvx,Tx,Tvy,Ty,Tt,"niejawna metoda Eulera")
+#Tvx,Tx,Tvy,Ty,Tt=euler_mul1(40,10**(-3),0)
+#show(Tvx,Tx,Tvy,Ty,Tt,"niejawna metoda Eulera")
 
 #zadanie 3c
 
@@ -230,11 +230,11 @@ def fx(x,y):
 def fy(x,y):
     return -y*(x**2+y**2)**(-3/2)
 
-def euler_poljawny(t_end,h):
-    Tx=[1]
+def euler_poljawny(t_end,h,e):
+    Tx=[1-e]
     Ty=[0]
     Tvx=[0]
-    Tvy=[1]
+    Tvy=[np.sqrt((1+e)/(1-e))]
     Tt=[0]
     t=0
     i=0
@@ -248,16 +248,16 @@ def euler_poljawny(t_end,h):
         t+=h
     return Tvx,Tx,Tvy,Ty,Tt
 
-Tvx,Tx,Tvy,Ty,Tt=euler_poljawny(40,10**(-3))
-show(Tvx,Tx,Tvy,Ty,Tt,"poljawna metoda Eulera")
+#Tvx,Tx,Tvy,Ty,Tt=euler_poljawny(40,10**(-3),0)
+#show(Tvx,Tx,Tvy,Ty,Tt,"poljawna metoda Eulera")
 
 #zadanie 3d
 
-def runge_kutta(t_end,h):
-    Tx=[1]
+def runge_kutta(t_end,h,e):
+    Tx=[1-e]
     Ty=[0]
     Tvx=[0]
-    Tvy=[1]
+    Tvy=[np.sqrt((1+e)/(1-e))]
     Tt=[0]
     t=0
     i=0
@@ -293,7 +293,7 @@ def runge_kutta(t_end,h):
     return Tvx,Tx,Tvy,Ty,Tt
     
 
-Tvx,Tx,Tvy,Ty,Tt=runge_kutta(40,10**(-3))
+Tvx,Tx,Tvy,Ty,Tt=runge_kutta(40,10**(-2),0.4)
 show(Tvx,Tx,Tvy,Ty,Tt,"RK4")
 
 
