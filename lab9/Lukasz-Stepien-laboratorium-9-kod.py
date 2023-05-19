@@ -1,6 +1,9 @@
 from matplotlib import axes
 import matplotlib.pyplot as plt
 import numpy as np
+# import os
+
+# os.chdir('C:/Users/user/Desktop/AGH/mownit')
 
 # zadanie 2
 
