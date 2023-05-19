@@ -293,7 +293,7 @@ def runge_kutta(t_end,h,e):
     return Tvx,Tx,Tvy,Ty,Tt
     
 
-Tvx,Tx,Tvy,Ty,Tt=runge_kutta(40,10**(-2),0.3)
+Tvx,Tx,Tvy,Ty,Tt=runge_kutta(40,10**(-2),0.2)
 show(Tvx,Tx,Tvy,Ty,Tt,"RK4")
 
 
