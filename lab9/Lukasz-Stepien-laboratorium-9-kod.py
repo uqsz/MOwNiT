@@ -26,7 +26,7 @@ plt.xlabel('t')
 plt.ylabel('y')
 plt.title('Metoda Eulera dla kroku h=0.5')
 plt.grid(True)
-plt.savefig(f"pictures/Metoda Eulera dla kroku h=0,5", dpi=350)
+# plt.savefig("pictures/Metoda Eulera dla kroku h=0,5", dpi=350)
 # plt.show()
 
 def niejawny_euler(t_end,h,f):
@@ -49,7 +49,7 @@ plt.xlabel('t')
 plt.ylabel('y')
 plt.title('Niejawna metoda Eulera dla kroku h=0.5')
 plt.grid(True)
-plt.savefig(f"pictures/Niejawna metoda Eulera dla kroku h=0,5", dpi=350)
+# plt.savefig(f"pictures/Niejawna metoda Eulera dla kroku h=0,5", dpi=350)
 # plt.show()
 
 
@@ -71,7 +71,7 @@ def show(Tvx,Tx,Tvy,Ty,Tt,title):
     plt.ylabel('y')
     plt.title('Wykres y(t) -> '+title)
     plt.grid(True)
-    plt.savefig("pictures/"+'Wykres y(t) '+title, dpi=350)
+    # plt.savefig("pictures/"+'Wykres y(t) '+title, dpi=350)
     # plt.show()
     
     plt.clf()
@@ -80,7 +80,7 @@ def show(Tvx,Tx,Tvy,Ty,Tt,title):
     plt.ylabel('x')
     plt.title('Wykres x(t) -> '+title)
     plt.grid(True)
-    plt.savefig("pictures/"+'Wykres x(t) '+title, dpi=350)
+    # plt.savefig("pictures/"+'Wykres x(t) '+title, dpi=350)
     # plt.show()
     
     plt.clf()
@@ -92,7 +92,7 @@ def show(Tvx,Tx,Tvy,Ty,Tt,title):
     plt.title('Wykres x(y) -> '+title)
     plt.grid(True)
     ax.set_aspect('equal', adjustable='box')
-    plt.savefig("pictures/"+'Wykres x(y) '+title, dpi=350)
+    # plt.savefig("pictures/"+'Wykres x(y) '+title, dpi=350)
     # plt.show()
     
     Tr=[r(Tx[i],Ty[i]) for i in range(len(Tx))]
@@ -104,7 +104,7 @@ def show(Tvx,Tx,Tvy,Ty,Tt,title):
     plt.ylabel('vr')
     plt.title('Wykres vr(r) -> '+title)
     plt.grid(True)
-    plt.savefig("pictures/"+'Wykres vr(r) '+title, dpi=350)
+    # plt.savefig("pictures/"+'Wykres vr(r) '+title, dpi=350)
     # plt.show()
     
     Tpze=[pze(Tvx[i],Tvy[i],Tx[i],Ty[i]) for i in range(len(Tx))]
@@ -115,7 +115,7 @@ def show(Tvx,Tx,Tvy,Ty,Tt,title):
     plt.ylabel('E')
     plt.title('Wykres energii E(t) -> '+title)
     plt.grid(True)
-    plt.savefig("pictures/"+'Wykres energii E(t) '+title, dpi=350)
+    # plt.savefig("pictures/"+'Wykres energii E(t) '+title, dpi=350)
     # plt.show()
     
     Tpzmp=[pzmp(Tvx[i],Tvy[i],Tx[i],Ty[i]) for i in range(len(Tx))]
@@ -125,7 +125,7 @@ def show(Tvx,Tx,Tvy,Ty,Tt,title):
     plt.ylabel('p')
     plt.title('Wykres momentu pedu p(t) -> '+title)
     plt.grid(True)
-    plt.savefig("pictures/"+'Wykres momentu pedu p(t) '+title, dpi=350)
+    # plt.savefig("pictures/"+'Wykres momentu pedu p(t) '+title, dpi=350)
     # plt.show()
 
 
