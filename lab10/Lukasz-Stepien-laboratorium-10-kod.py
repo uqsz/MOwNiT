@@ -3,34 +3,51 @@ from pylab import meshgrid,cm,imshow,contour,clabel,colorbar,title
 import matplotlib.pyplot as plt
 
 def psi(x,y,L,n1,n2):
-    return (2/L)*np.sin((n1*np.pi*(x+L/2)/L))*np.sin((n2*np.pi*(y+L/2)/L))
-
-def exact_graph(n1,n2):
-    plt.clf()
-    if n2==1: tmp=1 
-    else: tmp=-1
-    x = np.arange(-1.0,1.0,10**(-2))
-    y = np.arange(-1.0,1.0,10**(-2))
-    X,Y = meshgrid(x, y) 
-    Z = psi(X,Y,2,n1,n2)
-    Z[:, 0] = 0
-    Z[:, -1] = 0
-    Z[0, :] = 0
-    Z[-1, :] = 0
-    im=imshow(Z,cmap=cm.hot, extent=[-1, 1, -1, 1])
-    cset = contour(x,y,tmp*Z, levels=np.arange(-1,1, 0.1),linewidths=1,extend='both')
-    clabel(cset,inline=True,fmt='%1.1f',fontsize=10)
-    plt.xlim(-1, 1)
-    plt.ylim(-1, 1)
-    colorbar(im)
-    title(r'$\psi(x, y) = sin{({\frac{n_1 {\pi} \left( x + 1\right)}{2}})} \sin{\left({\frac{n_2 {\pi} \left( y + 1 \right)}{2}} \right)},  (n_1,n_2)=$'+f'({n1},{n2})')
-    # plt.savefig(f"lab10/pictures/Wykres konturowy funkcji ψ(x,y) dla (n1,n2)=({n1},{n2})", dpi=350)
-    plt.show()
-    return Z
-    
-Z11=exact_graph(1,1)
-Z12=exact_graph(1,2)
-Z21=exact_graph(2,1)
-Z22=exact_graph(2,2)
+    return (2/L)*np.sin((n1*np.pi*(x+L/2)/L))*np.sin((n2*np))
 
 # print(Z22)
+import numpy as np
+import matplotlib.pyplot as plt
+import deepxde as dde
+from deepxde.backend import tf
+
+L=2
+
+def pde(x, psi):
+    laplacian = dde.grad.hessian(psi, x, i=0, j=0) + dde.grad.hessian(psi, x, i=1, j=1)
+    V = (1**2 + 1**2) * np.pi**2 / (2 * 2**2)
+    return 1/2 * laplacian + V * psi
+
+def solve(pde):
+    geom = dde.geometry.Rectangle([-L / 2, -L / 2], [L / 2, L / 2])
+
+    bc = dde.DirichletBC(geom, lambda _: -1, lambda x, on_boundary: on_boundary)
+
+    data = dde.data.PDE(geom, pde, bc, num_domain=132, num_boundary=30, num_test=100)
+
+    # Aktualizacja definicji sieci z uwzględnieniem parametrów n1 i n2
+    net = dde.maps.FNN([2] + [20] * 3 + [1], "tanh", "Glorot normal")
+
+    model = dde.Model(data, net)
+    model.compile("adam", lr=0.001)
+
+    losshistory, train_state = model.train(iterations=2000)
+
+    return model
+
+
+def draw_model( model ):
+    x = np.linspace(-L / 2, L / 2, 100)
+    y = np.linspace(-L / 2, L / 2, 100)
+    X, Y = np.meshgrid(x, y)
+    xy = np.vstack([X.flatten(), Y.flatten()]).T
+    pred = model.predict(xy)
+    Z = pred.reshape(X.shape)
+
+    plt.figure(figsize=(8, 6))
+    plt.pcolormesh(X, Y, Z, shading='auto')
+    plt.colorbar()
+    plt.show()
+    
+model1 = solve(pde)
+draw_model(model1)
