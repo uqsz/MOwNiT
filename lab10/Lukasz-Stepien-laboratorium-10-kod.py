@@ -75,13 +75,13 @@ def draw_model( model,n1,n2 ):
     plt.savefig(f"lab10/pictures/DeepXDE ψ(x,y) dla (n1,n2)=({n1},{n2})", dpi=350)
     # plt.show()
     
-# model11,train_state11 = solve(pde11,[[0, 0]], [1])
-# draw_model(model11,1,1)
-# model12,train_state12 = solve(pde12,[0, -0.5], [1])
-# draw_model(model12,1,2)
-# model21,train_state21 = solve(pde21,[-0.5, 0], [1])
-# draw_model(model21,2,1)
-model22,train_state22 = solve(pde22,[[-0.5, 0.5],[0.5, -0.5],[-0.5, -0.5]], [-1,-1,1])
+model11,train_state11 = solve(pde11,[[0, 0]], [1])
+draw_model(model11,1,1)
+model12,train_state12 = solve(pde12,[0, -0.5], [1])
+draw_model(model12,1,2)
+model21,train_state21 = solve(pde21,[-0.5, 0], [1])
+draw_model(model21,2,1)
+model22,train_state22 = solve(pde22,[[-0.5, 0.5],[0.5, -0.5]], [-1,-1])
 draw_model(model22,2,2)
 
 def draw_error(model, Z,n1,n2):
@@ -102,9 +102,9 @@ def draw_error(model, Z,n1,n2):
     plt.savefig(f"lab10/pictures/Błąd ψ(x,y) dla (n1,n2)=({n1},{n2})", dpi=350)
     # plt.show()
     
-# draw_error(model11, Z11,1,1)
-# draw_error(model12, Z12,1,2)
-# draw_error(model21, Z21,2,1)
+draw_error(model11, Z11,1,1)
+draw_error(model12, Z12,1,2)
+draw_error(model21, Z21,2,1)
 draw_error(model22, Z22,2,2)
 
 def draw_cost(train_state, n1,n2):
