@@ -8,21 +8,34 @@ L=2
 def psi(x,y,L,n1,n2):
     return (2/L)*np.sin((n1*np.pi*(x+L/2)/L))*np.sin((n2*np.pi*(y+L/2)/L))
 
+def initial_points(points, values):
+    tps = []
+    for i in range(len(points)):
+        tp = dde.PointSetBC(points[i], values[i])
+        tps.append(tp)
+    return tps
+
+def get_value(points,n1,n2):
+    tmp1 = np.sin(n1 * np.pi * (points[:, :, 0] + L / 2) / L)
+    tmp2 = np.sin(n2 * np.pi * (points[:, :, 1] + L / 2) / L)
+    res = 2 / L * tmp1 * tmp2
+    return res.reshape(1, -1)[0]
+
 
 def show_exact(n1,n2):
     x = np.linspace(-L/2, L/2, 100)
     y = np.linspace(-L/2, L/2, 100)
     X, Y = np.meshgrid(x, y)
     Z = psi(X, Y, L, n1, n2)
-    fig, ax = plt.subplots()
-    c = ax.pcolormesh(X, Y, Z, cmap='viridis')
-    contour = ax.contour(X, Y, Z, colors='black', linewidths=0.5)
-    plt.clabel(contour, inline=True, fontsize=8)
-    fig.colorbar(c, ax=ax)
-    plt.xlabel('x')
-    plt.ylabel('y')
-    plt.title(r'$\psi(x, y) = sin{({\frac{n_1 {\pi} \left( x + 1\right)}{2}})} \sin{\left({\frac{n_2 {\pi} \left( y + 1 \right)}{2}} \right)},  (n_1,n_2)=$'+f'({n1},{n2})')
-    plt.savefig(f"lab10/pictures/ψ(x,y) dla (n1,n2)=({n1},{n2})", dpi=350)
+    # fig, ax = plt.subplots()
+    # c = ax.pcolormesh(X, Y, Z, cmap='viridis')
+    # contour = ax.contour(X, Y, Z, colors='black', linewidths=0.5)
+    # plt.clabel(contour, inline=True, fontsize=8)
+    # fig.colorbar(c, ax=ax)
+    # plt.xlabel('x')
+    # plt.ylabel('y')
+    # plt.title(r'$\psi(x, y) = sin{({\frac{n_1 {\pi} \left( x + 1\right)}{2}})} \sin{\left({\frac{n_2 {\pi} \left( y + 1 \right)}{2}} \right)},  (n_1,n_2)=$'+f'({n1},{n2})')
+    # # plt.savefig(f"lab10/pictures/ψ(x,y) dla (n1,n2)=({n1},{n2})", dpi=350)
     # plt.show()
     return Z
     
@@ -44,15 +57,16 @@ def pde22(x, psi): return pde(x, psi, 2, 2)
 
 def solve(pde,points,values):
     geom = dde.geometry.Rectangle([-L / 2, -L / 2], [L / 2, L / 2])
-    dirichlet_bc = dde.DirichletBC(geom, lambda _: 0, lambda x, on_boundary: on_boundary)
-    point_bc = dde.PointSetBC(points, values)
-    bc = [dirichlet_bc, point_bc]
-    # data = dde.data.PDE(geom, pde, bc, num_domain=500, num_boundary=50, num_test=10000)
-    data = dde.data.PDE(geom, pde, bc, num_domain=500, num_boundary=60, num_test=10**5)
+    bc = dde.icbc.DirichletBC(geom, lambda x: 0, lambda x, on_boundary: on_boundary)
+    conditions = [bc]
+    tps = initial_points(points, values)
+    for tp in tps:
+        conditions.append(tp)
+    data = dde.data.PDE(geom, pde, conditions, num_domain= 400, num_boundary= 60, num_test=10**3)
     net = dde.maps.FNN([2] + [20] * 3 + [1], "tanh", "Glorot normal")
     model = dde.Model(data, net)
     model.compile("adam", lr=0.001)
-    losshistory, train_state = model.train(iterations=3000)
+    losshistory, train_state = model.train(iterations=2000)
     # print(losshistory,train_state)
     return model,train_state
 
@@ -65,24 +79,37 @@ def draw_model( model,n1,n2 ):
     pred = model.predict(xy)
     Z = pred.reshape(X.shape)
 
-    fig, ax = plt.subplots()
-    c = ax.pcolormesh(X, Y, Z, cmap='viridis')
-    contour = ax.contour(X, Y, Z, colors='black', linewidths=0.5)
-    plt.clabel(contour, inline=True, fontsize=8)
-    fig.colorbar(c, ax=ax)
-    title = r'$\left(\frac{{\partial^2 \psi(x, y)}}{{\partial x^2}} + \frac{{\partial^2 \psi(x, y)}}{{\partial y^2}}\right) +  \frac{\left(n_1^2 + n_2^2\right){\pi^2}}{{2L^2}} \psi(x, y) = 0,  (n_1,n_2)=$'+f'({n1},{n2})'
-    plt.title(title)
-    plt.savefig(f"lab10/pictures/DeepXDE ψ(x,y) dla (n1,n2)=({n1},{n2})", dpi=350)
+    # fig, ax = plt.subplots()
+    # c = ax.pcolormesh(X, Y, Z, cmap='viridis')
+    # contour = ax.contour(X, Y, Z, colors='black', linewidths=0.5)
+    # plt.clabel(contour, inline=True, fontsize=8)
+    # fig.colorbar(c, ax=ax)
+    # title = r'$\left(\frac{{\partial^2 \psi(x, y)}}{{\partial x^2}} + \frac{{\partial^2 \psi(x, y)}}{{\partial y^2}}\right) +  \frac{\left(n_1^2 + n_2^2\right){\pi^2}}{{2L^2}} \psi(x, y) = 0,  (n_1,n_2)=$'+f'({n1},{n2})'
+    # plt.title(title)
+    # plt.savefig(f"lab10/pictures/DeepXDE ψ(x,y) dla (n1,n2)=({n1},{n2})", dpi=350)
     # plt.show()
-    
-model11,train_state11 = solve(pde11,[[0, 0]], [1])
+
+
+points = np.array([[[-0.5, 0]]])
+values = get_value(points,1,1)
+model11,train_state11 = solve(pde11,points,values)
 draw_model(model11,1,1)
-model12,train_state12 = solve(pde12,[0, -0.5], [1])
-draw_model(model12,1,2)
-model21,train_state21 = solve(pde21,[-0.5, 0], [1])
-draw_model(model21,2,1)
-model22,train_state22 = solve(pde22,[[-0.5, 0.5],[0.5, -0.5]], [-1,-1])
-draw_model(model22,2,2)
+loss_history = model11.train_state.loss_history()
+
+# points = np.array([[[0, -0.5]], [[0, 0.5]]])
+# values = get_value(points,1,2)
+# model12,train_state12 = solve(pde12,points,values)
+# draw_model(model12,1,2)
+
+# points = np.array([[[-0.5, 0]], [[0.5, 0]]])
+# values = get_value(points,2,1)
+# model21,train_state21 = solve(pde21,points,values)
+# draw_model(model21,2,1)
+
+# points = np.array([[[-0.5, -0.5]], [[-0.5, 0.5]], [[0.5, -0.5]], [[0.5, 0.5]],[[0, 0]]])
+# values = get_value(points,2,2)
+# model22,train_state22 = solve(pde22,points,values)
+# draw_model(model22,2,2)
 
 def draw_error(model, Z,n1,n2):
     x = np.linspace(-L / 2, L / 2, 100)
